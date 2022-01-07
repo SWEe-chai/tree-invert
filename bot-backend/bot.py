@@ -52,9 +52,9 @@ def echo(update, context):
 id = 0 
 def invert(update, context):
     """Echo the user message."""
-    global id
-    newFile = update.message.photo[-1].get_file()
-    newFile.download(f"file{id}.jpg")
+    global ID
+    new_file = update.message.photo[-1].get_file()
+    new_file.download(f"file{id}.jpg")
     image = Image.open(f"file{id}.jpg")
 
     if is_tree(f"file{id}.jpg"):
@@ -82,7 +82,7 @@ def main():
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
-    updater = Updater("5012350483:AAH1JhRaPcYz39uALFGcXI8jfGp8Jmv5L-w",
+    updater = Updater("TOKEN",
                       use_context=True)
 
     # Get the dispatcher to register handlers
