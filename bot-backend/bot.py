@@ -53,10 +53,10 @@ def help(update, context):
     joke = "/joke - A joke"
     help = "/help - Recursion"
 
-    msg = basic_help + '\n\n'
+    msg = (basic_help + '\n\n'
     + about + '\n'
     + joke + '\n'
-    + help + '\n'
+    + help + '\n')
     update.message.reply_text(msg)
 
 def echo(update, context):
