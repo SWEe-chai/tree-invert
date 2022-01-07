@@ -75,6 +75,7 @@ def reply_is_tree(update, filename):
     update.message.reply_photo(open(filename, 'rb'))
 
 def reply_not_tree(update):
+    update.message.reply_text("Don't think that's a tree right there! Here's a guideline on how trees should be.")
     update.message.reply_photo(open('./default_reply.jpg', 'rb'))
 
 def is_tree(image_file_path):
