@@ -45,12 +45,15 @@ def echo(update, context):
     update.message.reply_text("Please upload image")
 
 
+ID = 0
+
 def predict(update, context):
     """Echo the user message."""
+    global ID
     newFile = update.message.photo[-1].get_file()
-    newFile.download()
+    newFile.download(f"file{ID}.jpg")
     update.message.reply_photo(open('reply.jpg', 'rb'))
-
+    ID += 1
 
 def error(update, context):
     """Log Errors caused by Updates."""
