@@ -70,10 +70,8 @@ def invert(update, context):
         reply_not_tree(update)
 
 def reply_is_tree(update, filename):
-    update.message.reply_text("""\
-    Hey! Looks like your tree is upside down. Here's the tree again in the\
-    correct orientation.
-    """)
+    update.message.reply_text("Hey! Looks like your tree is upside down. Here's the tree again in the "
+    + "correct orientation.")
     update.message.reply_photo(open(filename, 'rb'))
 
 def reply_not_tree(update):
@@ -108,7 +106,6 @@ def main():
 
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.photo, invert))
-    dp.add_handler(MessageHandler(Filters.text, echo))
 
     # log all errors
     dp.add_error_handler(error)
