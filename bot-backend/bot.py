@@ -65,9 +65,19 @@ def invert(update, context):
         rotated_image = image.rotate(180)
         rotated_image.save(filename)
         id += 1
-        update.message.reply_photo(open(filename, 'rb'))
+        reply_is_tree(update, filename)
     else:
-        update.message.reply_photo(open('./default_reply.jpg', 'rb'))
+        reply_not_tree(update)
+
+def reply_is_tree(update, filename):
+    update.message.reply_text("""\
+    Hey! Looks like your tree is upside down. Here's the tree again in the\
+    correct orientation.
+    """)
+    update.message.reply_photo(open(filename, 'rb'))
+
+def reply_not_tree(update):
+    update.message.reply_photo(open('./default_reply.jpg', 'rb'))
 
 def is_tree(image_file_path):
     image = image_keras.load_img(image_file_path, target_size=(299, 299))
