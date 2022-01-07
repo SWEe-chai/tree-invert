@@ -17,9 +17,12 @@ bot.
 
 import logging
 import telegram
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+import numpy as np
 from PIL import Image
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from tensorflow import keras
+from tensorflow.keras.preprocessing import image as image_keras
+from tensorflow.keras.applications.resnet50 import preprocess_input, decode_predictions
 model = keras.models.load_model('./basic.h5')
 
 # Enable logging
@@ -52,22 +55,23 @@ def echo(update, context):
 id = 0 
 def invert(update, context):
     """Echo the user message."""
-    global ID
+    global id
     new_file = update.message.photo[-1].get_file()
-    new_file.download(f"file{id}.jpg")
-    image = Image.open(f"file{id}.jpg")
+    filename = 'downloads/file{}.jpg'.format(id)
+    new_file.download(filename)
+    image = Image.open(filename)
 
-    if is_tree(f"file{id}.jpg"):
+    if is_tree(filename):
         rotated_image = image.rotate(180)
-        rotated_image.save(f"file{id}.jpg")
+        rotated_image.save(filename)
         id += 1
-        update.message.reply_photo(open(f"file{id}.jpg", 'rb'))
+        update.message.reply_photo(open(filename, 'rb'))
     else:
         update.message.reply_photo(open('./default_reply.jpg', 'rb'))
 
 def is_tree(image_file_path):
-    image = image.load_img('', target_size=(299, 299))
-    image_array = image.img_to_array(image)
+    image = image_keras.load_img(image_file_path, target_size=(299, 299))
+    image_array = image_keras.img_to_array(image)
     image_batch = np.expand_dims(image_array, axis=0)
     image_preprocessed = preprocess_input(image_batch)
     return model.predict(image_preprocessed)[0][0] == 1
@@ -82,8 +86,7 @@ def main():
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
-    updater = Updater("TOKEN",
-                      use_context=True)
+    updater = Updater("5012350483:AAH1JhRaPcYz39uALFGcXI8jfGp8Jmv5L-w", use_context=True)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
