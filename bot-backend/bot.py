@@ -86,7 +86,7 @@ def invert(update, context):
     if is_tree(filename):
         rotated_image = image.rotate(180)
         rotated_image.save(filename)
-        id += 1
+        id = (id + 1) % 5
         reply_is_tree(update, filename)
     else:
         reply_not_tree(update)
