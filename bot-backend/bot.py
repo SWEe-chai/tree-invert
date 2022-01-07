@@ -44,12 +44,14 @@ def echo(update, context):
     # print(update.message.photo)
     update.message.reply_text("Please upload image")
 
-
+id = 0 
 def predict(update, context):
     """Echo the user message."""
+    global id
     newFile = update.message.photo[-1].get_file()
-    newFile.download()
+    newFile.download(f"file{id}.jpg")
     update.message.reply_photo(open('reply.jpg', 'rb'))
+    id += 1
 
 
 def error(update, context):
@@ -62,7 +64,8 @@ def main():
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
-    updater = Updater("TOKEN", use_context=True)
+    updater = Updater("5016415897:AAFBhif89UgL-WWaVzKxiks_nZ41vckKl2U",
+                      use_context=True)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
