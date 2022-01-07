@@ -18,6 +18,9 @@ bot.
 import logging
 import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from PIL import Image
+from tensorflow import keras
+model = keras.models.load_model('./basic.h5')
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -32,6 +35,8 @@ def start(update, context):
     """Send a message when the command /start is issued."""
     update.message.reply_text('Hi!')
 
+def about(update, context):
+    update.message.reply_text('https://tinyurl.com/bdd57jxp')
 
 def help(update, context):
     """Send a message when the command /help is issued."""
@@ -45,14 +50,27 @@ def echo(update, context):
     update.message.reply_text("Please upload image")
 
 id = 0 
-def predict(update, context):
+def invert(update, context):
     """Echo the user message."""
     global id
     newFile = update.message.photo[-1].get_file()
     newFile.download(f"file{id}.jpg")
-    update.message.reply_photo(open('reply.jpg', 'rb'))
-    id += 1
+    image = Image.open(f"file{id}.jpg")
 
+    if is_tree(f"file{id}.jpg"):
+        rotated_image = image.rotate(180)
+        rotated_image.save(f"file{id}.jpg")
+        id += 1
+        update.message.reply_photo(open(f"file{id}.jpg", 'rb'))
+    else:
+        update.message.reply_photo(open('./default_reply.jpg', 'rb'))
+
+def is_tree(image_file_path):
+    image = image.load_img('', target_size=(299, 299))
+    image_array = image.img_to_array(image)
+    image_batch = np.expand_dims(image_array, axis=0)
+    image_preprocessed = preprocess_input(image_batch)
+    return model.predict(image_preprocessed)[0][0] == 1
 
 def error(update, context):
     """Log Errors caused by Updates."""
@@ -64,7 +82,7 @@ def main():
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
-    updater = Updater("5016415897:AAFBhif89UgL-WWaVzKxiks_nZ41vckKl2U",
+    updater = Updater("5012350483:AAH1JhRaPcYz39uALFGcXI8jfGp8Jmv5L-w",
                       use_context=True)
 
     # Get the dispatcher to register handlers
@@ -73,9 +91,10 @@ def main():
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("about", about))
 
     # on noncommand i.e message - echo the message on Telegram
-    dp.add_handler(MessageHandler(Filters.photo, predict))
+    dp.add_handler(MessageHandler(Filters.photo, invert))
     dp.add_handler(MessageHandler(Filters.text, echo))
 
     # log all errors
