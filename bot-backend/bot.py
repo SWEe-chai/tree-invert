@@ -60,6 +60,15 @@ def invert(update, context):
     filename = 'downloads/file{}.jpg'.format(id)
     new_file.download(filename)
     image = Image.open(filename)
+    mentioned = False
+
+    for entity in update.message.caption_entities:
+        if entity.type == 'mention' and update.message.parse_caption_entity(entity) == '@TreeInverterBot':
+            mentioned = True
+            break
+
+    if not mentioned:
+        return
 
     if is_tree(filename):
         rotated_image = image.rotate(180)
