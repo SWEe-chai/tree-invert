@@ -67,7 +67,7 @@ def invert(update, context):
             mentioned = True
             break
 
-    if not mentioned:
+    if update.message['chat']['type'] == 'group' and not mentioned:
         return
 
     if is_tree(filename):
