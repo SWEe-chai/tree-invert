@@ -1,5 +1,9 @@
 To run
-1. Create virtual environment
-2. Install `pip3 install python-telegram-bot`
-3. Replace token at line 65
-4. `python3 bot.py`
+
+Update the token if needed.
+
+```bash
+python3 -m venv venv
+pip install -r requirements.txt
+python3 bot.py
+```
