@@ -16,7 +16,7 @@ bot.
 """
 
 import logging
-
+import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 # Enable logging
@@ -47,20 +47,9 @@ def echo(update, context):
 
 def predict(update, context):
     """Echo the user message."""
-    # print("aaaa")
-    # print(update)
-    # print(update.message)
-    # if update.message.photo:
-    #     print(update.message.photo)
-    print(update.message.photo)
-    newFile = update.message.photo[-1].file_id
-    # print("this is the new file")
-    # print(newFile)
-    # newFile = telegram.Bot.get_file(newFile)
-    print(newFile)
+    newFile = update.message.photo[-1].get_file()
     newFile.download()
-    # cannot work yet
-    update.message.reply_text("Please upload image")
+    update.message.reply_photo(open('reply.jpg', 'rb'))
 
 
 def error(update, context):
@@ -73,7 +62,7 @@ def main():
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
-    updater = Updater("5016415897:AAFBhif89UgL-WWaVzKxiks_nZ41vckKl2U", use_context=True)
+    updater = Updater("TOKEN", use_context=True)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
