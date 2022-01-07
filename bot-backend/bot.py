@@ -38,13 +38,26 @@ def start(update, context):
     """Send a message when the command /start is issued."""
     update.message.reply_text('Hi!')
 
-def about(update, context):
+def joke(update, context):
     update.message.reply_text('https://tinyurl.com/bdd57jxp')
+
+def about(update, context):
+    update.message.reply_text("Computer scientists have differing views on trees compared to common men. "
+    + "If a tree looks unfamiliar for you, send that to us and we will fix that for you!")
+    update.message.reply_photo(open('./default_reply.jpg', 'rb'))
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('Help!')
+    basic_help = "If you are in a group, mention this bot while you send a picture!"
+    about = "/about - About this bot"
+    joke = "/joke - A joke"
+    help = "/help - Recursion"
 
+    msg = (basic_help + '\n\n'
+    + about + '\n'
+    + joke + '\n'
+    + help + '\n')
+    update.message.reply_text(msg)
 
 def echo(update, context):
     """Echo the user message."""
@@ -84,8 +97,7 @@ def reply_is_tree(update, filename):
     update.message.reply_photo(open(filename, 'rb'))
 
 def reply_not_tree(update):
-    update.message.reply_text("Don't think that's a tree right there! Here's a guideline on how trees should be.")
-    update.message.reply_photo(open('./default_reply.jpg', 'rb'))
+    update.message.reply_text("Don't think that's a tree right there!")
 
 def is_tree(image_file_path):
     image = image_keras.load_img(image_file_path, target_size=(299, 299))
@@ -112,6 +124,7 @@ def main():
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("joke", joke))
     dp.add_handler(CommandHandler("about", about))
 
     # on noncommand i.e message - echo the message on Telegram
